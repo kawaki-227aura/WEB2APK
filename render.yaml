@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: web2apk-kawaki227
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:
+      name: web2apk-data
+      mountPath: /app/jobs
+      sizeGB: 10

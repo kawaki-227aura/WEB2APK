@@ -11,13 +11,13 @@ function project(d,url,name,id){
  fs.mkdirSync(src,{recursive:true});["drawable","values"].forEach(x=>fs.mkdirSync(path.join(rv,x),{recursive:true}));
  fs.writeFileSync(path.join(d,"settings.gradle"),`pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }\ndependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }\nrootProject.name="WEB2APK"; include(":app")`);
  fs.writeFileSync(path.join(d,"build.gradle"),`plugins { id 'com.android.application' version '8.7.3' apply false }`);
- fs.writeFileSync(path.join(d,"gradle.properties"),"org.gradle.jvmargs=-Xmx1536m\nandroid.useAndroidX=true\n");
+ fs.writeFileSync(path.join(d,"gradle.properties"),"org.gradle.jvmargs=-Xmx1536m\n");
  fs.mkdirSync(path.join(d,"app"),{recursive:true});
- fs.writeFileSync(path.join(d,"app/build.gradle"),`plugins { id 'com.android.application' }\nandroid { namespace '${p}'; compileSdk 35\n defaultConfig { applicationId '${p}'; minSdk 23; targetSdk 35; versionCode 1; versionName '1.0' }\n}\ndependencies { implementation 'androidx.appcompat:appcompat:1.7.0' }`);
+ fs.writeFileSync(path.join(d,"app/build.gradle"),`plugins { id 'com.android.application' }\nandroid { namespace '${p}'; compileSdk 35\n defaultConfig { applicationId '${p}'; minSdk 23; targetSdk 35; versionCode 1; versionName '1.0' }\n}\ndependencies { }`);
  fs.writeFileSync(path.join(rv,"values/strings.xml"),`<resources><string name="app_name">${name.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</string></resources>`);
  fs.writeFileSync(path.join(rv,"values/styles.xml"),`<resources><style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar"><item name="android:colorAccent">#00ff88</item><item name="android:navigationBarColor">#02040a</item></style></resources>`);
  fs.mkdirSync(path.join(d,"app/src/main"),{recursive:true});
- fs.writeFileSync(path.join(d,"app/src/main/AndroidManifest.xml"),`<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:theme="@style/AppTheme" android:label="@string/app_name"><activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>`);
+ fs.writeFileSync(path.join(d,"app/src/main/AndroidManifest.xml"),`<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:theme="@style/AppTheme" android:label="@string/app_name" android:usesCleartextTraffic="false"><activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>`);
  fs.writeFileSync(path.join(src,"MainActivity.java"),`package ${p}; import android.app.*; import android.os.*; import android.webkit.*; import android.graphics.Color; import android.view.*; import android.widget.*;
 public class MainActivity extends Activity { WebView w; public void onCreate(Bundle b){super.onCreate(b); LinearLayout l=new LinearLayout(this);l.setOrientation(LinearLayout.VERTICAL);w=new WebView(this);w.getSettings().setJavaScriptEnabled(true);w.getSettings().setDomStorageEnabled(true);w.setWebViewClient(new WebViewClient());w.loadUrl("${url.replace("\\","\\\\").replace('"','\\"')}");l.addView(w,new LinearLayout.LayoutParams(-1,0,1));TextView t=new TextView(this);t.setText("by kawaki");t.setTextColor(Color.GRAY);t.setTextSize(8);t.setGravity(Gravity.CENTER);l.addView(t,new LinearLayout.LayoutParams(-1,22));setContentView(l);} }`);
 }
@@ -32,4 +32,4 @@ app.get("/api/status/:id",(q,r)=>{let p=path.join(JOBS,q.params.id,"job.json");i
 app.get("/api/download/:id",(q,r)=>{let p=path.join(JOBS,q.params.id,q.params.id+".apk");fs.existsSync(p)?r.download(p,"WEB2APK-"+q.params.id+".apk"):r.status(404).send("APK pas encore prêt.")});
 app.get("/health",(q,r)=>r.json({ok:true}));
 app.use((e,q,r,n)=>r.status(400).json({error:e.message}));
-app.listen(PORT,()=>console.log("WEB2APK KAWAKI227 V3 on "+PORT));
+app.listen(PORT,()=>console.log("WEB2APK KAWAKI227 V4 on "+PORT));
